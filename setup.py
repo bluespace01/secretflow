@@ -21,7 +21,7 @@ import shutil
 import subprocess
 import sys
 import time
-from datetime import date
+from datetime import datetime
 from pathlib import Path
 from typing import List
 
@@ -48,39 +48,45 @@ def get_commit_id() -> str:
     return commit_id
 
 
-def complete_version_file(*filepath):
-    today = date.today()
-    dstr = today.strftime("%Y%m%d")
-    with open(os.path.join(".", *filepath), "r") as fp:
-        content = fp.read()
-
-    content = content.replace("$$DATE$$", dstr)
-    content = content.replace("$$BUILD_TIME$$", time.strftime('%b %d %Y, %X'))
-    try:
-        content = content.replace("$$COMMIT_ID$$", get_commit_id())
-    except:
-        pass
-
-    if "SF_BUILD_DOCKER_NAME" in os.environ:
-        content = content.replace(
-            "$$DOCKER_VERSION$$", os.environ["SF_BUILD_DOCKER_NAME"]
-        )
-
-    with open(os.path.join(".", *filepath), "w+") as fp:
-        fp.write(content)
-
-
 def find_version(*filepath):
-    complete_version_file(*filepath)
-    # Extract version information from filepath
-    with open(os.path.join(".", *filepath)) as fp:
-        version_match = re.search(
-            r"^__version__ = ['\"]([^'\"]*)['\"]", fp.read(), re.M
-        )
-        if version_match:
-            return version_match.group(1)
-        print("Unable to find version string.")
-        exit(-1)
+    local_time = datetime.today()
+    # convert local_date to string with date and time info
+    dstr=local_time.strftime("%y%m%d.%H%M")
+
+    lines=[]
+    new_lines=[]
+    # open file for read 
+    with open(os.path.join(".", *filepath), "r") as fp:
+        # Read all lines into a list
+        lines = fp.readlines()    
+    for line in lines:
+        if "__version__ = " in line:
+            # find the third '.dev' in the line from the right
+            pos_start = len("__version__ = ")+1
+            parts = line[pos_start:].split('.')
+            if len(parts) >= 3:
+                joined_parts = '.'.join(parts[:3])
+                pos_end = len(joined_parts) + pos_start
+            version = line[pos_start:pos_end]+ '.' +dstr
+            line = line[:pos_end] +'.'+ dstr + '"'+"\n"
+        if "__commit_id__ =" in line:
+            try:
+                line = line[0:len("__commit_id__ = ")] + '"' + get_commit_id() + '"\n'
+            except:
+                pass
+        if "__docker_version__ =" in line:
+            if "SF_BUILD_DOCKER_NAME" in os.environ:
+                line = line[0:len("__docker_version__ = ")] + '"' + os.environ["SF_BUILD_DOCKER_NAME"] + '"\n'
+        if "__build_time__ =" in line:
+            line = line[:len("__build_time__ = ")] + '"' + local_time.strftime('%b %d %Y, %X') + '"\n'
+
+        new_lines.append(line)
+
+    # save new line to the file of *filepath
+    with open(os.path.join(".", *filepath), "w+") as fp:
+        fp.writelines(new_lines)
+
+    return version
 
 
 def filter_requirements(requirements: List[str], custom_feature: str):
