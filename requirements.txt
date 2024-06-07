@@ -6,9 +6,9 @@
 clean-text  # FEATURE=[lite]
 click  # FEATURE=[lite]
 grpcio==1.56.2  # FEATURE=[lite]
-jax[cpu]>=0.4.16  # FEATURE=[lite]
-jaxlib>=0.4.16  # FEATURE=[lite]
-kuscia==0.0.2.dev240320  # FEATURE=[lite]
+jax[cpu]>=0.4.16,<=0.4.26  # FEATURE=[lite]
+jaxlib>=0.4.16,<=0.4.26  # FEATURE=[lite]
+kuscia==0.0.2b0  # FEATURE=[lite]
 multiprocess  # FEATURE=[lite]
 networkx==2.8.8
 numba==0.57.0  # FEATURE=[lite]
@@ -25,6 +25,7 @@ sdc-apis==0.1.0.dev240320; platform_machine == "x86_64"  # FEATURE=[lite]
 sdc-sdk==0.1.0.dev240320; platform_machine == "x86_64"  # FEATURE=[lite]
 ray==2.9.3  # FEATURE=[lite]
 secretflow-rayfed==0.2.1a2 # FEATURE=[lite]
+aiohttp >=3.9.4,<4
 # For security reason.
 setuptools>=65.5.1  # FEATURE=[lite]
 # For security reason.
@@ -32,7 +33,7 @@ certifi>=2023.7.22  # FEATURE=[lite]
 sparse>=0.14.0
 spu==0.9.0b1 # FEATURE=[lite]
 sf-heu==0.5.0.b0 # FEATURE=[lite]
-secretflow_serving_lib==0.3.1b0 # FEATURE=[lite]
+secretflow-serving-lib==0.3.1b0 # FEATURE=[lite]
 tensorflow-macos>=2.12,<2.13; platform_system == "Darwin"
 tensorflow>=2.12,<2.13; platform_system != "Darwin"
 tf2onnx>=1.13.0
