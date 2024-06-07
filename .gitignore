@@ -357,4 +357,6 @@ temp
 # customized
 rob-*
 .gitignore
+.npy
+.npz
 
