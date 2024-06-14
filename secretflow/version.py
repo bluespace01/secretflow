@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-__version__ = "1.6.0.240611.1615"
-__commit_id__ = "fd054b304363391a9ae22ced496dbbcaf469c74c-dirty"
+__version__ = "1.6.0.$$DATE$$"
+__commit_id__ = "$$COMMIT_ID$$"
 __docker_version__ = "$$DOCKER_VERSION$$"
-__build_time__ = "Jun 11 2024, 16:15:12"
+__build_time__ = "$$BUILD_TIME$$"
 
 
 def build_message():
