@@ -27,7 +27,7 @@ ray==2.9.3  # FEATURE=[lite]
 secretflow-rayfed==0.2.1a2 # FEATURE=[lite]
 aiohttp >=3.9.4,<4
 # For security reason.
-setuptools>=65.5.1  # FEATURE=[lite]
+setuptools==69.5.1  # FEATURE=[lite]
 # For security reason.
 certifi>=2023.7.22  # FEATURE=[lite]
 sparse>=0.14.0
