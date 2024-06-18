@@ -3,6 +3,7 @@
 # used as a dependency of secretflow-lite.
 #
 # Avoid thead pool fork issue, see https://github.com/grpc/grpc/issues/31772
+setuptools==69.5.1  # FEATURE=[lite]
 clean-text  # FEATURE=[lite]
 click  # FEATURE=[lite]
 grpcio==1.56.2  # FEATURE=[lite]
@@ -27,7 +28,6 @@ ray==2.9.3  # FEATURE=[lite]
 secretflow-rayfed==0.2.1a2 # FEATURE=[lite]
 aiohttp >=3.9.4,<4
 # For security reason.
-setuptools==69.5.1  # FEATURE=[lite]
 # For security reason.
 certifi>=2023.7.22  # FEATURE=[lite]
 sparse>=0.14.0
