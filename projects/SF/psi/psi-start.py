@@ -5,9 +5,9 @@ print('The version of SecretFlow: {}'.format(sf.__version__))
 
 # In case you have a running secretflow runtime already.
 sf.shutdown()
-
 sf.init(['alice', 'bob', 'carol'], address='local')
 
+# creta the dataset
 import numpy as np
 from sklearn.datasets import load_iris
 
@@ -17,6 +17,7 @@ data['month'] = ['Jan'] * 75 + ['Feb'] * 75
 
 print(data)
 
+# split the dataset into 3 parts
 import os
 
 os.makedirs('.data', exist_ok=True)
@@ -26,14 +27,16 @@ da.to_csv('.data/alice.csv', index=False)
 db.to_csv('.data/bob.csv', index=False)
 dc.to_csv('.data/carol.csv', index=False)
 
+# start psi computation
 alice, bob = sf.PYU('alice'), sf.PYU('bob')
 spu = sf.SPU(sf.utils.testing.cluster_def(['alice', 'bob']))
 
+# psi computation 单键隐私求交
 input_path = {alice: '.data/alice.csv', bob: '.data/bob.csv'}
 output_path = {alice: '.data/alice_psi.csv', bob: '.data/bob_psi.csv'}
 spu.psi_csv('uid', input_path, output_path, 'alice')
 
-# verification
+# psi computation 单键隐私求交 verification
 import pandas as pd
 
 df = da.join(db.set_index('uid'), on='uid', how='inner', rsuffix='_bob', sort=True)
@@ -47,7 +50,7 @@ pd.testing.assert_frame_equal(db_psi, expected)
 
 print(da_psi)
 
-
+# 多键隐私求交
 #----------------------------------------------------------------------
 spu.psi_csv(['uid', 'month'], input_path, output_path, 'alice')
 df = da.join(
@@ -66,9 +69,8 @@ pd.testing.assert_frame_equal(da_psi, expected)
 pd.testing.assert_frame_equal(db_psi, expected)
 
 
+# 三方隐私求交
 #----------------------------------------------------------------------
-
-
 carol = sf.PYU('carol')
 spu_3pc = sf.SPU(sf.utils.testing.cluster_def(['alice', 'bob', 'carol']))
 
